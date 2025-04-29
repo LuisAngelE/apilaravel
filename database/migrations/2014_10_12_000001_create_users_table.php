@@ -8,20 +8,22 @@ class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('last_name', 255);
-            $table->string('email')->unique();
-            $table->string('password', 255);
+            $table->string('name', 100);
+            $table->string('last_name', 100);
+            $table->string('email', 150)->unique();
             $table->string('phone', 20)->nullable();
-
+            $table->string('password');
+            $table->date('birthdate')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+
             $table->rememberToken();
             $table->timestamps();
         });
@@ -29,10 +31,8 @@ class CreateUsersTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('users');
     }
